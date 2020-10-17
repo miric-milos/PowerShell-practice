@@ -6,6 +6,20 @@ function Get-RunningVms {
     return $vms
 }
 
+function Get-LinuxVMs {
+    $vms = Get-RunningVms
+
+    # Using arrayList to store Linux VMs
+    $list = New-Object -TypeName "System.Collections.ArrayList"
+    foreach ($vm in $vms) {
+        if ($vm.StorageProfile.OsDisk.OsType -eq "Linux") {
+            $list += $vm
+        }
+    }
+
+    Out-AsTable($list)
+}
+
 function Get-CPUUsage($location) {
     if ($null -eq $location -or $location -eq "") {
         Write-Host "No location provided"
@@ -22,5 +36,9 @@ Write-Host "Listing all running VMs..."
 # in order to avoid desynchronization
 Out-AsTable(Get-RunningVms)
 
+# 5)
 $location = Read-Host "Type in a location to search for"
 Out-AsTable(Get-CPUUsage($location))
+
+# 6)
+Get-LinuxVMs
