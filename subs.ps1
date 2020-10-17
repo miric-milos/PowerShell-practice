@@ -1,3 +1,5 @@
+. .\global_func.ps1
+
 # 1) Connect-AzAccount
 
 # 2)
@@ -12,7 +14,7 @@ function Get-SubsByName($name) {
 
     foreach ($sub in $subs) {
         if($sub.Name -eq $name) {
-            $sub | Format-Table -AutoSize | Out-String | Write-Host
+            Out-AsTable($sub)
             return # $sub
         }
     }
@@ -21,6 +23,7 @@ function Get-SubsByName($name) {
 }
 
 Write-Host "Listing all subscriptions..."
-Get-AllSubs | Format-Table -AutoSize | Out-String | Write-Host
+Out-AsTable(Get-AllSubs)
+
 $name = Read-Host "Input a name to search for"
 Get-SubsByName($name)
